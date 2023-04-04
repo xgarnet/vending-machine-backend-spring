@@ -30,12 +30,12 @@ public class UserController {
     }
 
     @PutMapping(value = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserModel> updateProduct(@PathVariable String id, @RequestBody UserModel userModel) {
+    public ResponseEntity<UserModel> updateUser(@PathVariable String id, @RequestBody UserModel userModel) {
         return new ResponseEntity<>(userService.updateUser(id, userModel), HttpStatus.FOUND);
     }
 
-    @DeleteMapping(value = "/product/{id}")
-    public ResponseEntity deleteProduct(@PathVariable String id) {
+    @DeleteMapping(value = "/user/{id}")
+    public ResponseEntity deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
