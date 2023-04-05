@@ -18,11 +18,11 @@ public class ProductController {
 
     @GetMapping(value = "/product", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ProductModel>> getProducts() {
-        return  new ResponseEntity(productService.getAllProducts(), HttpStatus.OK);
+        return  new ResponseEntity<>(productService.getAllProducts(), HttpStatus.OK);
     }
     @GetMapping(value = "/product/{id}")
     public ResponseEntity<ProductModel> getProductById(@PathVariable("id") String id) {
-        return  new ResponseEntity(productService.getProductById(id), HttpStatus.OK);
+        return  new ResponseEntity<>(productService.getProductById(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "/product", produces = MediaType.APPLICATION_JSON_VALUE, consumes =  MediaType.APPLICATION_JSON_VALUE)
@@ -35,11 +35,9 @@ public class ProductController {
         return new ResponseEntity<>(productService.updateProduct(id, productModel), HttpStatus.FOUND);
     }
 
-
     @DeleteMapping(value = "/product/{id}")
     public ResponseEntity deleteProduct(@PathVariable String id) {
         productService.deleteProduct(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }

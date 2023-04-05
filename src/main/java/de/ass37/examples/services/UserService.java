@@ -25,7 +25,7 @@ public class UserService {
     }
 
     public UserModel getUserById(String id) {
-        return userRepository.findById(Long.getLong(id))
+        return userRepository.findById(Long.parseLong(id))
                 .map(user -> mapper.map(user, UserModel.class))
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
@@ -36,9 +36,11 @@ public class UserService {
     }
 
     public UserModel updateUser(String id, UserModel userModel) {
-        if(userRepository.existsById(Long.getLong(id))) {
+        if(userRepository.existsById(Long.parseLong(id))) {
+            userModel.setId(Long.parseLong(id));
             User user = mapper.map(userModel, User.class);
-            UserModel savedModel = mapper.map(user, UserModel.class);
+            User savedUser = userRepository.save(user);
+            UserModel savedModel = mapper.map(savedUser, UserModel.class);
             return savedModel;
         } else {
             throw new RuntimeException("no such id for user found");
@@ -46,8 +48,8 @@ public class UserService {
     }
 
     public void deleteUser(String id) {
-        if(userRepository.existsById(Long.getLong(id))) {
-            userRepository.deleteById(Long.getLong(id));
+        if(userRepository.existsById(Long.parseLong(id))) {
+            userRepository.deleteById(Long.parseLong(id));
         } else {
             new RuntimeException("no such id for user found");
         }

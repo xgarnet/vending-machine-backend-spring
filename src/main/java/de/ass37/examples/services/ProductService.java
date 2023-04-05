@@ -38,9 +38,11 @@ public class ProductService {
 
     public ProductModel updateProduct(String id, ProductModel productModel) {
         if(productRepository.existsById(Long.parseLong(id))) {
+            productModel.setId(Long.parseLong(id));
             Product product = mapper.map(productModel, Product.class);
-            ProductModel savedProduct = mapper.map(product, ProductModel.class);
-            return savedProduct;
+            Product savedProduct = productRepository.save(product);
+            ProductModel savedModel = mapper.map(savedProduct, ProductModel.class);
+            return savedModel;
         } else {
             throw new RuntimeException("no such id for product found");
         }

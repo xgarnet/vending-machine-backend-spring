@@ -11,17 +11,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class UserController {
     @Autowired
     private UserService userService;
 
     @GetMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserModel>> getUsers() {
-        return  new ResponseEntity(userService.getAllUsers(), HttpStatus.OK);
+        return  new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
     }
     @GetMapping( value = "/user/{id}",  produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserModel> getUserById(@PathVariable String id) {
-        return  new ResponseEntity(userService.getUserById(id), HttpStatus.OK);
+        return  new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
     @PostMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE, consumes =  MediaType.APPLICATION_JSON_VALUE)
