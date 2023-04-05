@@ -17,7 +17,7 @@ public class DepositService {
         coins.add(100l);
 
         if(!coins.contains(depositModel.getCoin())) {
-            
+
         } else {
 
         }
@@ -40,6 +40,7 @@ public class DepositService {
     user.deposit += coins.reduce((acc, curr) => acc + curr, 0);
     return user
      */
+
     public DepositModel getDeposit() {
         DepositModel depositModel = new DepositModel();
         return depositModel;
