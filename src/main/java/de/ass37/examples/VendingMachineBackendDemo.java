@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class SpringAppBackendDemoApplication {
+public class VendingMachineBackendDemo {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringAppBackendDemoApplication.class, args);
+		SpringApplication.run(VendingMachineBackendDemo.class, args);
 	}
 
 

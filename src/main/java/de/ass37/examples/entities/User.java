@@ -1,12 +1,10 @@
 package de.ass37.examples.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 @Data
@@ -14,6 +12,21 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
+    private String firstname;
+    private String lastname;
+    private String username;
+    private String password;
+    private Long deposit;
+    private String roleEntity;
+}
+
+/*
 public class User  implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -60,3 +73,5 @@ public class User  implements UserDetails {
         return false;
     }
 }
+
+ */
