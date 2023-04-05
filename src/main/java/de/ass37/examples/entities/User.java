@@ -18,12 +18,10 @@ public class User {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    private String firstname;
-    private String lastname;
     private String username;
     private String password;
     private Long deposit;
-    private String roleEntity;
+    private String role;
 }
 
 /*

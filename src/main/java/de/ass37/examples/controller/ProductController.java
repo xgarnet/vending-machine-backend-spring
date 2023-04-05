@@ -20,8 +20,8 @@ public class ProductController {
     public ResponseEntity<List<ProductModel>> getProducts() {
         return  new ResponseEntity(productService.getAllProducts(), HttpStatus.OK);
     }
-    @GetMapping( value = "/product/{id}")
-    public ResponseEntity<ProductModel> getProductById(@PathVariable String id) {
+    @GetMapping(value = "/product/{id}")
+    public ResponseEntity<ProductModel> getProductById(@PathVariable("id") String id) {
         return  new ResponseEntity(productService.getProductById(id), HttpStatus.OK);
     }
 
@@ -31,7 +31,7 @@ public class ProductController {
     }
 
     @PutMapping(value = "/product/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductModel> updateProduct(@PathVariable String id, @RequestBody ProductModel productModel) {
+    public ResponseEntity<ProductModel> updateProduct(@PathVariable("id") String id, @RequestBody ProductModel productModel) {
         return new ResponseEntity<>(productService.updateProduct(id, productModel), HttpStatus.FOUND);
     }
 
