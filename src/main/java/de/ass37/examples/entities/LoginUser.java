@@ -21,7 +21,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Table(name = "loginuser")
 public class LoginUser  implements UserDetails {
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator="login_sequence")
+    @SequenceGenerator(name="login_sequence",sequenceName="login_sequence", allocationSize=1)
     private Integer id;
     private String firstname;
     private String lastname;
