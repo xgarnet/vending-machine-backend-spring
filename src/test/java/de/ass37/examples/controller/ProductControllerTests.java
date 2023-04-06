@@ -1,5 +1,6 @@
 package de.ass37.examples.controller;
 
+import de.ass37.examples.services.LoginService;
 import de.ass37.examples.services.ProductService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,9 @@ public class ProductControllerTests {
 
     @MockBean
     private ProductService productService;
+
+    @MockBean
+    private LoginService loginService;
 
     @Disabled
     @Test

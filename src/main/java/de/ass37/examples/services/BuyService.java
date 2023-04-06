@@ -2,7 +2,8 @@ package de.ass37.examples.services;
 
 import de.ass37.examples.entities.Product;
 import de.ass37.examples.entities.User;
-import de.ass37.examples.models.BuyModel;
+import de.ass37.examples.models.BuyReqModel;
+import de.ass37.examples.models.BuyRespModel;
 import de.ass37.examples.repository.ProductRepository;
 import de.ass37.examples.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -21,36 +22,29 @@ public class BuyService {
         this.userRepository = userRepository;
     }
 
-    public BuyModel buyByUser(BuyModel buyModel) {
-        Product product = productRepository.findById(buyModel.getProductId()).orElseThrow(() -> new RuntimeException("Kein Product mit dieser ID"));
-        if(product.getAmountAvailable() < buyModel.getMenge()) {
-            throw  new RuntimeException("Not Enoght products available");
-        }
+    public BuyRespModel buyByUser(BuyReqModel buyReqModel, String username) {
 
-        User user = userRepository.findById(buyModel.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
-
-        if(user.getDeposit() < product.getCost() * buyModel.getMenge()) {
-            throw new RuntimeException("Not enoght deposit");
-        }
-
-        product.setAmountAvailable(product.getAmountAvailable() - buyModel.getMenge());
-        user.setDeposit(user.getDeposit() - product.getCost() * buyModel.getMenge());
-        buyModel.setChanges(calculateChanges(user.getDeposit()));
-        buyModel.setMessage("Purchase successful");
-
-        return buyModel;
-    }
-
-    private List<Integer> calculateChanges(Integer deposit) {
-        int[] coins = new int[] {100, 50, 20, 10, 5};
-        List<Integer> changes = Collections.emptyList();
-        for (int coin : coins) {
-            while (deposit >= coin) {
-                changes.add(coin);
-                deposit -= coin;
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("no such user found"));
+        if(user.getRole().equalsIgnoreCase("buyer")) {
+            Product product = productRepository.findById(buyReqModel.getProductId()).orElseThrow(() -> new RuntimeException("Kein Product mit dieser ID"));
+            if(product.getAmountAvailable() < buyReqModel.getMenge()) {
+                throw  new RuntimeException("Not Enoght products available");
             }
+            if(user.getDeposit() < product.getCost() * buyReqModel.getMenge()) {
+                throw new RuntimeException("Not enoght deposit");
+            }
+            product.setAmountAvailable(product.getAmountAvailable() - buyReqModel.getMenge());
+            product = productRepository.save(product);
+            user.setDeposit(user.getDeposit() - product.getCost() * buyReqModel.getMenge());
+            user = userRepository.save(user);
+            BuyRespModel buyRespModel = new BuyRespModel();
+            buyRespModel.setChanges(user.getDeposit());
+            buyRespModel.setMessage("Susseccful");
+            return buyRespModel;
+        } else {
+            throw new RuntimeException("no role buyer found");
         }
-        return changes;
+
     }
 
 }

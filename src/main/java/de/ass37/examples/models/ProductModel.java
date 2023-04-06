@@ -6,11 +6,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductModel {
-    private Long id;
+    private Integer id;
 
-    private Long amountAvailable;
-    private Long cost;
+    private Integer amountAvailable;
+    private Integer cost;
     private String productName;
-    private Long sellerId;
+    private Integer sellerId;
 
 }
