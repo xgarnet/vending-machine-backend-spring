@@ -38,3 +38,13 @@ create table if not exists token (
 );
 
 create sequence if not exists token_sequence start with  1 increment by 1;
+
+create table if not exists jwtoken (
+     id int primary key,
+     token varchar(1024),
+     token_type varchar(100),
+     revoked boolean,
+     expired boolean,
+     user_id int
+);
+create sequence if not exists jwtoken_sequence start with  1 increment by 1;

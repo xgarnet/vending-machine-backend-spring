@@ -11,11 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Token {
-
+public class JWToken {
     @Id
-    @GeneratedValue(generator="token_sequence")
-    @SequenceGenerator(name="token_sequence",sequenceName="token_sequence", allocationSize=1)
+    @GeneratedValue(generator="jwtoken_sequence")
+    @SequenceGenerator(name="jwtoken_sequence",sequenceName="jwtoken_sequence", allocationSize=1)
     public Integer id;
 
     @Column(unique = true)
@@ -30,5 +29,5 @@ public class Token {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    public LoginUser loginUser;
+    public User user;
 }

@@ -61,7 +61,7 @@ public class AuthenticationService {
 
     private void saveUserToken(LoginUser user, String jwtToken) {
         var token = Token.builder()
-                .user(user)
+                .loginUser(user)
                 .token(jwtToken)
                 .tokenType(TokenType.BEARER)
                 .expired(false)

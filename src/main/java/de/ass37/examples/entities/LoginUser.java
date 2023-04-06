@@ -32,7 +32,7 @@ public class LoginUser  implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "loginUser")
     private List<Token> tokens;
 
     @Override
