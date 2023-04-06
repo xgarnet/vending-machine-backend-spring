@@ -27,7 +27,7 @@ public class User implements UserDetails {
 
     private String username;
     private String password;
-    private Long deposit;
+    private Integer deposit;
     private String role;
 
     @OneToMany(mappedBy = "user")

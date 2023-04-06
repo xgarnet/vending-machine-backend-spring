@@ -1,6 +1,6 @@
 package de.ass37.examples.services;
 
-import de.ass37.examples.repository.TokenRepository;
+import de.ass37.examples.repository.JWTokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class LogoutService implements LogoutHandler {
 
     @Autowired
-    private  TokenRepository tokenRepository;
+    private JWTokenRepository tokenRepository;
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {

@@ -3,6 +3,7 @@ package de.ass37.examples.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.relational.core.sql.In;
 
 @Entity
 @Getter
@@ -14,9 +15,9 @@ public class Product {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    private Long amountAvailable;
-    private Long cost;
+    private Integer amountAvailable;
+    private Integer cost;
     private String productName;
-    private Long sellerId;
+    private Integer sellerId;
 
 }

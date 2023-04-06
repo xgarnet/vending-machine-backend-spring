@@ -1,14 +1,13 @@
 package de.ass37.examples.services;
 
-import de.ass37.examples.entities.LoginUser;
-import de.ass37.examples.entities.Role;
-import de.ass37.examples.entities.Token;
+import de.ass37.examples.entities.User;
+import de.ass37.examples.entities.JWToken;
 import de.ass37.examples.entities.TokenType;
 import de.ass37.examples.models.auth.AuthenticationRequest;
 import de.ass37.examples.models.auth.AuthenticationResponse;
 import de.ass37.examples.models.auth.RegisterRequest;
-import de.ass37.examples.repository.LoginUserRepository;
-import de.ass37.examples.repository.TokenRepository;
+import de.ass37.examples.repository.UserRepository;
+import de.ass37.examples.repository.JWTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,19 +18,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final LoginUserRepository repository;
-    private final TokenRepository tokenRepository;
+    private final UserRepository repository;
+    private final JWTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final LoginService jwtService;
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
-        var user = LoginUser.builder()
-                .firstname(request.getFirstname())
-                .lastname(request.getLastname())
-                .email(request.getEmail())
+        var user = User.builder()
+                .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .deposit(request.getDeposit())
+                .role(request.getRole())
                 .build();
         var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -45,11 +43,11 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
+                        request.getUsername(),
                         request.getPassword()
                 )
         );
-        var user = repository.findByEmail(request.getEmail())
+        var user = repository.findByUsername(request.getUsername())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
@@ -59,9 +57,9 @@ public class AuthenticationService {
                 .build();
     }
 
-    private void saveUserToken(LoginUser user, String jwtToken) {
-        var token = Token.builder()
-                .loginUser(user)
+    private void saveUserToken(User user, String jwtToken) {
+        var token = JWToken.builder()
+                .user(user)
                 .token(jwtToken)
                 .tokenType(TokenType.BEARER)
                 .expired(false)
@@ -70,7 +68,7 @@ public class AuthenticationService {
         tokenRepository.save(token);
     }
 
-    private void revokeAllUserTokens(LoginUser user) {
+    private void revokeAllUserTokens(User user) {
         var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty())
             return;

@@ -41,10 +41,10 @@ public class BuyService {
         return buyModel;
     }
 
-    private List<Long> calculateChanges(Long deposit) {
-        long[] coins = new long[] {100, 50, 20, 10, 5};
-        List<Long> changes = Collections.emptyList();
-        for (long coin : coins) {
+    private List<Integer> calculateChanges(Integer deposit) {
+        int[] coins = new int[] {100, 50, 20, 10, 5};
+        List<Integer> changes = Collections.emptyList();
+        for (int coin : coins) {
             while (deposit >= coin) {
                 changes.add(coin);
                 deposit -= coin;

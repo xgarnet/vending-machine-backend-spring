@@ -9,10 +9,10 @@ import java.util.List;
 @Getter
 @Setter
 public class BuyModel {
-    private Long userId;
+    private Integer userId;
     private Long productId;
     private int menge;
-    private List<Long> changes;
+    private List<Integer> changes;
     private String message;
     private Long totalSpent;
 }

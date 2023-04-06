@@ -25,7 +25,7 @@ public class UserService {
     }
 
     public UserModel getUserById(String id) {
-        return userRepository.findById(Long.parseLong(id))
+        return userRepository.findById(Integer.parseInt(id))
                 .map(user -> mapper.map(user, UserModel.class))
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
@@ -36,7 +36,7 @@ public class UserService {
     }
 
     public UserModel updateUser(String id, UserModel userModel) {
-        if(userRepository.existsById(Long.parseLong(id))) {
+        if(userRepository.existsById(Integer.parseInt(id))) {
             userModel.setId(Long.parseLong(id));
             User user = mapper.map(userModel, User.class);
             User savedUser = userRepository.save(user);
@@ -48,8 +48,8 @@ public class UserService {
     }
 
     public void deleteUser(String id) {
-        if(userRepository.existsById(Long.parseLong(id))) {
-            userRepository.deleteById(Long.parseLong(id));
+        if(userRepository.existsById(Integer.parseInt(id))) {
+            userRepository.deleteById(Integer.parseInt(id));
         } else {
             new RuntimeException("no such id for user found");
         }
