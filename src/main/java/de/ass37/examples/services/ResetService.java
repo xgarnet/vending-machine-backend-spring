@@ -3,6 +3,7 @@ package de.ass37.examples.services;
 import de.ass37.examples.entities.User;
 import de.ass37.examples.models.UserModel;
 import de.ass37.examples.repository.UserRepository;
+import de.ass37.examples.services.exceptions.BadServiceCallException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class ResetService {
     }
 
     public UserModel resetDeposit(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("no such username found"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new BadServiceCallException("no such username found"));
         user.setDeposit(0);
         User savedUser = userRepository.save(user);
         return mapper.map(savedUser, UserModel.class);

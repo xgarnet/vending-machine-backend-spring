@@ -3,6 +3,7 @@ package de.ass37.examples.services;
 import de.ass37.examples.entities.User;
 import de.ass37.examples.models.UserModel;
 import de.ass37.examples.repository.UserRepository;
+import de.ass37.examples.services.exceptions.BadServiceCallException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,12 +39,12 @@ public class DepositService {
             User savedUser = userRepository.save(user);
             return mapper.map(savedUser, UserModel.class);
         } else {
-            throw new RuntimeException("no such coin allowed");
+            throw new BadServiceCallException("no such coin allowed");
         }
     }
 
     public UserModel getDeposit(String username) {
-         User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("no such username"));
+         User user = userRepository.findByUsername(username).orElseThrow(() -> new BadServiceCallException("no such username"));
          return mapper.map(user, UserModel.class);
     }
 }

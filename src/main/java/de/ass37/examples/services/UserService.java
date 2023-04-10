@@ -3,9 +3,12 @@ package de.ass37.examples.services;
 import de.ass37.examples.entities.User;
 import de.ass37.examples.models.UserModel;
 import de.ass37.examples.repository.UserRepository;
+import de.ass37.examples.services.exceptions.BadServiceCallException;
+import de.ass37.examples.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.List;
 
@@ -24,10 +27,11 @@ public class UserService {
                 .toList();
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
     public UserModel getUserById(String id) {
         return userRepository.findById(Integer.parseInt(id))
                 .map(user -> mapper.map(user, UserModel.class))
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new BadServiceCallException("User with id: " + id + " not found"));
     }
 
     public UserModel addUser(UserModel userModel) {
@@ -43,7 +47,7 @@ public class UserService {
             UserModel savedModel = mapper.map(savedUser, UserModel.class);
             return savedModel;
         } else {
-            throw new RuntimeException("no such id for user found");
+            throw new BadServiceCallException("User with id: " + id + " not found");
         }
     }
 
@@ -51,7 +55,7 @@ public class UserService {
         if(userRepository.existsById(Integer.parseInt(id))) {
             userRepository.deleteById(Integer.parseInt(id));
         } else {
-            new RuntimeException("no such id for user found");
+           throw new BadServiceCallException("User with id: " + id + " not found");
         }
     }
 }

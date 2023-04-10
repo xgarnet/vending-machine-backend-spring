@@ -6,10 +6,8 @@ import de.ass37.examples.models.BuyReqModel;
 import de.ass37.examples.models.BuyRespModel;
 import de.ass37.examples.repository.ProductRepository;
 import de.ass37.examples.repository.UserRepository;
+import de.ass37.examples.services.exceptions.BadServiceCallException;
 import org.springframework.stereotype.Service;
-
-import java.util.Collections;
-import java.util.List;
 
 @Service
 public class BuyService {
@@ -24,14 +22,14 @@ public class BuyService {
 
     public BuyRespModel buyByUser(BuyReqModel buyReqModel, String username) {
 
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("no such user found"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new BadServiceCallException("no such user found"));
         if(user.getRole().equalsIgnoreCase("buyer")) {
-            Product product = productRepository.findById(buyReqModel.getProductId()).orElseThrow(() -> new RuntimeException("Kein Product mit dieser ID"));
+            Product product = productRepository.findById(buyReqModel.getProductId()).orElseThrow(() -> new BadServiceCallException("Kein Product mit dieser ID"));
             if(product.getAmountAvailable() < buyReqModel.getMenge()) {
-                throw  new RuntimeException("Not Enoght products available");
+                throw  new BadServiceCallException("Not Enoght products available");
             }
             if(user.getDeposit() < product.getCost() * buyReqModel.getMenge()) {
-                throw new RuntimeException("Not enoght deposit");
+                throw new BadServiceCallException("Not enoght deposit");
             }
             product.setAmountAvailable(product.getAmountAvailable() - buyReqModel.getMenge());
             product = productRepository.save(product);
@@ -42,7 +40,7 @@ public class BuyService {
             buyRespModel.setMessage("Susseccful");
             return buyRespModel;
         } else {
-            throw new RuntimeException("no role buyer found");
+            throw new BadServiceCallException("no role buyer found");
         }
 
     }
