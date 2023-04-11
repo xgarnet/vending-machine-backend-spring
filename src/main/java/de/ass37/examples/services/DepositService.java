@@ -25,7 +25,7 @@ public class DepositService {
     }
 
     public UserModel addToDepositByUser(String username, String coin) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("no such username"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new BadServiceCallException("no such user found"));
 
         List<Integer> coins = new ArrayList<>();
         coins.add(5);
