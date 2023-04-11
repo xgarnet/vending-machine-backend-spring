@@ -1,13 +1,15 @@
 package de.ass37.examples.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.relational.core.sql.In;
 
+@Builder
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
     @Id
     @GeneratedValue(generator="product_sequence")

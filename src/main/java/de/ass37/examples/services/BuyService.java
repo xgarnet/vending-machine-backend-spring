@@ -24,7 +24,7 @@ public class BuyService {
 
         User user = userRepository.findByUsername(username).orElseThrow(() -> new BadServiceCallException("no such user found"));
         if(user.getRole().equalsIgnoreCase("buyer")) {
-            Product product = productRepository.findById(buyReqModel.getProductId()).orElseThrow(() -> new BadServiceCallException("Kein Product mit dieser ID"));
+            Product product = productRepository.findById(buyReqModel.getProductId()).orElseThrow(() -> new BadServiceCallException("no such product id found"));
             if(product.getAmountAvailable() < buyReqModel.getMenge()) {
                 throw  new BadServiceCallException("Not Enoght products available");
             }
@@ -37,7 +37,7 @@ public class BuyService {
             user = userRepository.save(user);
             BuyRespModel buyRespModel = new BuyRespModel();
             buyRespModel.setChanges(user.getDeposit());
-            buyRespModel.setMessage("Susseccful");
+            buyRespModel.setMessage("Successful");
             return buyRespModel;
         } else {
             throw new BadServiceCallException("no role buyer found");
