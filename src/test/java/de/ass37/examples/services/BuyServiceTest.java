@@ -87,7 +87,7 @@ public class BuyServiceTest {
         // Given
         final String errorMessage = "Not Enoght products available";
         final User user = User.builder().username("user").password("user").role("buyer").build();
-        Product product = Product.builder().id(1l).amountAvailable(2).build();
+        Product product = Product.builder().id(1).amountAvailable(2).build();
         BuyReqModel buyReqModel = new BuyReqModel();
         buyReqModel.setMenge(3);
         buyReqModel.setProductId(1);
@@ -109,7 +109,7 @@ public class BuyServiceTest {
         final String errorMessage = "Not enoght deposit";
 
         User user = User.builder().role("buyer").deposit(10).build();
-        Product product = Product.builder().id(1l).amountAvailable(1).cost(11).build();
+        Product product = Product.builder().id(1).amountAvailable(1).cost(11).build();
         final BuyReqModel buyReqModel = new BuyReqModel();
         buyReqModel.setMenge(1);
         buyReqModel.setProductId(1);
@@ -132,10 +132,6 @@ public class BuyServiceTest {
         buyReqModel.setProductId(1);
         final Product product = Product.builder().amountAvailable(3).cost(20).build();
         final User user = User.builder().deposit(45).role("buyer").build();
-
-        //final BuyRespModel buyRespModel = new BuyRespModel();
-        //buyRespModel.setMessage("successfull");
-        //buyRespModel.setChanges(5);
 
         //When
         Mockito.when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));

@@ -71,7 +71,7 @@ public class ProductService {
     public void  deleteProduct(String id, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new BadServiceCallException("no such user"));
         if(user.getRole().equalsIgnoreCase("seller")) {
-            Product product = productRepository.findById(Integer.parseInt(id)).orElseThrow(() -> new BadServiceCallException("no such product found"));
+            Product product = productRepository.findById(Integer.parseInt(id)).orElseThrow(() -> new BadServiceCallException("no such product id"));
             if(product.getSellerId() == user.getId()) {
                 productRepository.deleteById(Integer.parseInt(id));
             } else {

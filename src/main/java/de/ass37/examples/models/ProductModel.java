@@ -1,10 +1,12 @@
 package de.ass37.examples.models;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+@Builder
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProductModel {
     private Integer id;
 
