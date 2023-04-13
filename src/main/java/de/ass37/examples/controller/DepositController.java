@@ -22,6 +22,7 @@ public class DepositController {
 
     @GetMapping("/deposit")
     public ResponseEntity<UserModel> getDeposit(@RequestHeader(HttpHeaders.AUTHORIZATION) String autorization) {
+        System.out.println("getDeposit");
         String username =  loginService.extractUsername(autorization.substring(7));
         return new ResponseEntity<>(depositService.getDeposit(username), HttpStatus.FOUND);
     }
@@ -29,6 +30,7 @@ public class DepositController {
     @PostMapping(value = "/deposit/{coin}", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserModel> addToDeposit(@RequestHeader(HttpHeaders.AUTHORIZATION) String autorization, @PathVariable("coin") String coin) {
+        System.out.println("addToDeposit");
         String username =  loginService.extractUsername(autorization.substring(7));
         return new ResponseEntity<>(depositService.addToDepositByUser(username, coin), HttpStatus.OK);
     }

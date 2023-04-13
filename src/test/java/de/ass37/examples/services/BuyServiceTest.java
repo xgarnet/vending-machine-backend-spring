@@ -25,7 +25,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
+@SpringBootTest(classes = {BuyService.class})
 @AutoConfigureMockMvc
 public class BuyServiceTest {
 
@@ -124,7 +124,7 @@ public class BuyServiceTest {
     }
 
     @Test
-    public void testBuySuccessfull() {
+    public void testBuySuccessful() {
 
         //Given
         final BuyReqModel buyReqModel = new BuyReqModel();

@@ -47,4 +47,3 @@ public class ApplicationConfiguration extends WebMvcConfigurationSupport {
     }
 
 }
-

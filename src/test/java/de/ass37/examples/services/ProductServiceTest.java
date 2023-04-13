@@ -10,11 +10,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.parameters.P;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
@@ -26,7 +26,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest
+@SpringBootTest(classes = {ProductService.class, ModelMapper.class})
 @AutoConfigureMockMvc
 public class ProductServiceTest {
 
@@ -207,7 +207,6 @@ public class ProductServiceTest {
         //Given
         final String id = "1";
         final String errorMessage = "no such user";
-        final ProductModel product = ProductModel.builder().build();
 
         //When
         Mockito.when(userRepository.findByUsername(anyString())).thenReturn(Optional.empty());
@@ -239,7 +238,6 @@ public class ProductServiceTest {
         //Given
         final String errorMessage = "no seller role found";
         final User user = User.builder().role("buyer").build();
-        final ProductModel productModel = ProductModel.builder().build();
         final String id = "1";
 
         //When
