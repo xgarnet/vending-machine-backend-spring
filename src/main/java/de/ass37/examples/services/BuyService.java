@@ -7,7 +7,11 @@ import de.ass37.examples.models.BuyRespModel;
 import de.ass37.examples.repository.ProductRepository;
 import de.ass37.examples.repository.UserRepository;
 import de.ass37.examples.services.exceptions.BadServiceCallException;
+import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BuyService {
@@ -36,7 +40,8 @@ public class BuyService {
             user.setDeposit(user.getDeposit() - product.getCost() * buyReqModel.getMenge());
             user = userRepository.save(user);
             BuyRespModel buyRespModel = new BuyRespModel();
-            buyRespModel.setChanges(user.getDeposit());
+            //buyRespModel.setChanges(user.getDeposit());
+            buyRespModel.setChanges(changeCoins(user.getDeposit()));
             buyRespModel.setMessage("Successful");
             return buyRespModel;
         } else {
@@ -45,4 +50,18 @@ public class BuyService {
 
     }
 
+    private List<Integer> changeCoins(Integer deposit) {
+
+        List<Integer> changes = new ArrayList<>();
+        List<Integer> coins = List.of(100, 50, 20, 10, 5);
+
+        for (Integer coin : coins) {
+            while (deposit >= coin) {
+                changes.add(coin);
+                deposit-=coin;
+            }
+        }
+        if(deposit > 0) changes.add(deposit);
+        return  changes;
+    }
 }

@@ -25,6 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ProductController.class)
@@ -166,7 +167,10 @@ public class ProductControllerTests {
     @Test
     public void testUpdateProduct_Successful() throws Exception {
         //Given
-        final ProductModel productModel = ProductModel.builder().build();
+        final ProductModel productModel = ProductModel.builder().productName("Tea")
+                .amountAvailable(100)
+                .cost(25).sellerId(1)
+                .build();
 
         //When
         ObjectMapper objectMapper = new ObjectMapper();
@@ -176,15 +180,19 @@ public class ProductControllerTests {
         //Then
         MvcResult result = mvc.perform(MockMvcRequestBuilders.put("/api/product/1").with(csrf())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer test")
-                        .content(objectMapper.writeValueAsString(productModel))
-
+                        //.content(objectMapper.writeValueAsString(productModel))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content("{}")
                 )
+                .andDo(print())
+                //.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
+                //.andExpect(content().json("{}"))
                 .andExpect(status().isFound()).andReturn();
 
         // todo
-       final  String returnedContent = objectMapper.writeValueAsString(productModel);
-       final String expectedContent =  result.getResponse().getContentAsString();
+       final  String returnedContent =  result.getResponse().getContentAsString();
+       final String expectedContent = objectMapper.writeValueAsString(productModel);
+
        // Assertions.assertEquals(expectedContent, returnedContent);
     }
 
@@ -224,7 +232,6 @@ public class ProductControllerTests {
          mvc.perform(MockMvcRequestBuilders.delete("/api/product/1").with(csrf())
                          .header(HttpHeaders.AUTHORIZATION, "Bearer test"))
                 .andExpect(status().isNoContent());
-
     }
 
 }

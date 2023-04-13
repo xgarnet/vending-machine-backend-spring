@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -142,6 +143,6 @@ public class BuyServiceTest {
         //Then
         final BuyRespModel buyRespModel = buyService.buyByUser(buyReqModel, anyString());
         assertEquals("Successful", buyRespModel.getMessage());
-        assertEquals(5, buyRespModel.getChanges());
+        assertEquals(List.of(5), buyRespModel.getChanges());
     }
 }

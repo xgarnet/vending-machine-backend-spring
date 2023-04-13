@@ -19,6 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -77,7 +79,7 @@ public class BuyControllerTests {
         buyReqModel.setProductId(1);
         buyReqModel.setMenge(2);
          final BuyRespModel buyRespModel = new BuyRespModel();
-         buyRespModel.setChanges(15);
+         buyRespModel.setChanges(List.of(10, 5));
          buyRespModel.setMessage("Succeccful");
          final String user = "user";
          ObjectMapper objectMapper = new ObjectMapper();

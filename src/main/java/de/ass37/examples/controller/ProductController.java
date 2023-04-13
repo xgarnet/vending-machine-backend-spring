@@ -36,7 +36,7 @@ public class ProductController {
         return new ResponseEntity<>(productService.addProduct(productModel, username), HttpStatus.OK);
     }
 
-    @PutMapping(value = "/product/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/product/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductModel> updateProduct(@RequestHeader(HttpHeaders.AUTHORIZATION) String autorization, @PathVariable("id") String id, @RequestBody ProductModel productModel) {
         String username =  loginService.extractUsername(autorization.substring(7));
         return new ResponseEntity<>(productService.updateProduct(id, productModel, username), HttpStatus.FOUND);
