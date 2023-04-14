@@ -8,6 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 public class BuyRespModel {
+    Integer spent;
     private List<Integer> changes;
     private String message;
 }

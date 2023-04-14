@@ -37,9 +37,11 @@ public class BuyService {
             product.setAmountAvailable(product.getAmountAvailable() - buyReqModel.getMenge());
             product = productRepository.save(product);
             user.setDeposit(user.getDeposit() - product.getCost() * buyReqModel.getMenge());
-            user = userRepository.save(user);
             BuyRespModel buyRespModel = new BuyRespModel();
+            buyRespModel.setSpent(product.getCost());
             buyRespModel.setChanges(changeCoins(user.getDeposit()));
+            user.setDeposit(0);
+            user = userRepository.save(user);
             buyRespModel.setMessage("Successful");
             return buyRespModel;
         } else {

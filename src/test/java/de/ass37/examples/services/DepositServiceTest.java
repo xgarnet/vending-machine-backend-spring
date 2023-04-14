@@ -61,14 +61,15 @@ public class DepositServiceTest {
     @Test
     public void testAddToDepositSuccessful() {
         //Given
-        final User user = User.builder().deposit(10).build();
+        final User user = User.builder().username("user").deposit(10).build();
 
         //When
         Mockito.when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
         Mockito.when(userRepository.save(user)).thenReturn(user);
 
-        UserModel userModel = depositService.addToDepositByUser("user", "10");
+        UserModel userModel = depositService.addToDepositByUser(user.getUsername(), "10");
         assertEquals(userModel.getDeposit(), 20);
+        assertEquals(userModel.getUsername(), user.getUsername());
     }
 
 

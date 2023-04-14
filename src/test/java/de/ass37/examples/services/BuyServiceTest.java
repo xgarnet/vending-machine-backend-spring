@@ -120,7 +120,7 @@ public class BuyServiceTest {
         Mockito.when(productRepository.findById(anyInt())).thenReturn(Optional.of(product));
 
         // Then
-        Throwable exception = assertThrows(BadServiceCallException.class, () ->buyService.buyByUser(buyReqModel,anyString()));
+        Throwable exception = assertThrows(BadServiceCallException.class, () -> buyService.buyByUser(buyReqModel, anyString()));
         Assertions.assertEquals(errorMessage, exception.getMessage());
     }
 
