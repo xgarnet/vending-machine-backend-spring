@@ -7,6 +7,7 @@ import de.ass37.examples.repository.JWTokenRepository;
 import de.ass37.examples.services.BuyService;
 import de.ass37.examples.services.LoginService;
 import de.ass37.examples.services.exceptions.BadServiceCallException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,8 +44,11 @@ public class BuyControllerTests {
     @WithMockUser
     @Test
     public void testBuy_NotFound() throws Exception {
-        Mockito.when(buyService.buyByUser(any(), anyString())).thenThrow(BadServiceCallException.class);
-        Mockito.when(loginService.extractUsername(anyString())).thenReturn("user");
+        //When
+        Mockito.when(buyService.buyByUser(any(), any())).thenThrow(BadServiceCallException.class);
+        Mockito.when(loginService.extractUsername(any())).thenReturn("user");
+
+        //Then
         mvc.perform(MockMvcRequestBuilders.post("/api/buy").with(csrf())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer  test")
                         .content("{}")
@@ -60,8 +63,11 @@ public class BuyControllerTests {
     @WithMockUser
     @Test
     public void testBuy_BadRequest() throws Exception {
-        Mockito.when(buyService.buyByUser(any(), anyString())).thenThrow(NumberFormatException.class);
-        Mockito.when(loginService.extractUsername(anyString())).thenReturn("user");
+        //When
+        Mockito.when(buyService.buyByUser(any(), any())).thenThrow(NumberFormatException.class);
+        Mockito.when(loginService.extractUsername(any())).thenReturn("user");
+
+        //Then
         mvc.perform(MockMvcRequestBuilders.post("/api/buy").with(csrf())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer  test")
                         .content("{}")
@@ -81,11 +87,12 @@ public class BuyControllerTests {
          final BuyRespModel buyRespModel = new BuyRespModel();
          buyRespModel.setChanges(List.of(10, 5));
          buyRespModel.setMessage("Succeccful");
-         final String user = "user";
+         final String username = "user";
          ObjectMapper objectMapper = new ObjectMapper();
 
          //When
-        Mockito.when(buyService.buyByUser(buyReqModel, user)).thenReturn(buyRespModel);
+        Mockito.when(loginService.extractUsername(any())).thenReturn(username);
+        Mockito.when(buyService.buyByUser(any(), any())).thenReturn(buyRespModel);
 
         //Then
         MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/api/buy").with(csrf())
@@ -93,11 +100,11 @@ public class BuyControllerTests {
                         .content(objectMapper.writeValueAsString(buyReqModel))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk()).andReturn();
-        //todo
-        //final String val = result.getResponse().getContentAsString();
-        //BuyRespModel returnedBuyRespModel = objectMapper.readValue(val, BuyRespModel.class);
-        //Assertions.assertEquals(returnedBuyRespModel.getChanges(), buyRespModel.getChanges());
-        //Assertions.assertEquals(returnedBuyRespModel.getMessage(), buyRespModel.getMessage());
+
+        final String val = result.getResponse().getContentAsString();
+        BuyRespModel returnedBuyRespModel = objectMapper.readValue(val, BuyRespModel.class);
+        Assertions.assertEquals(returnedBuyRespModel.getChanges(), buyRespModel.getChanges());
+        Assertions.assertEquals(returnedBuyRespModel.getMessage(), buyRespModel.getMessage());
     }
 
 }

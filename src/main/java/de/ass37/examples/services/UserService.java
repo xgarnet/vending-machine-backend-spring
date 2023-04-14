@@ -5,9 +5,9 @@ import de.ass37.examples.models.UserModel;
 import de.ass37.examples.repository.UserRepository;
 import de.ass37.examples.services.exceptions.BadServiceCallException;
 import de.ass37.examples.services.exceptions.ResourceNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.List;
@@ -41,7 +41,7 @@ public class UserService {
 
     public UserModel updateUser(String id, UserModel userModel) {
         if(userRepository.existsById(Integer.parseInt(id))) {
-            userModel.setId(Long.parseLong(id));
+            userModel.setId(Integer.parseInt(id));
             User user = mapper.map(userModel, User.class);
             User savedUser = userRepository.save(user);
             UserModel savedModel = mapper.map(savedUser, UserModel.class);

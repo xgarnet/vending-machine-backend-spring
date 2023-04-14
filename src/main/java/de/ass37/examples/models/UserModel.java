@@ -8,11 +8,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserModel {
-    private Long id;
+    private Integer id;
 
     private String username;
     private String password;
-    private Long deposit;
+    private Integer deposit;
     private String role;
 
 }

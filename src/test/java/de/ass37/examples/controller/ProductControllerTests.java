@@ -25,7 +25,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ProductController.class)
@@ -100,8 +99,8 @@ public class ProductControllerTests {
     @Test
     public void testAddProduct_BadRequest() throws Exception {
 
-        Mockito.when(loginService.extractUsername(anyString())).thenReturn("user");
-        Mockito.when(productService.addProduct(any(), anyString())).thenThrow(NumberFormatException.class);
+        Mockito.when(loginService.extractUsername(any())).thenReturn("user");
+        Mockito.when(productService.addProduct(any(), any())).thenThrow(NumberFormatException.class);
 
         mvc.perform(MockMvcRequestBuilders.post("/api/product").with(csrf())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer test")
@@ -116,11 +115,12 @@ public class ProductControllerTests {
     @Test
     public void testAddProduct_Successful() throws Exception {
         //Given
-        final ProductModel productModel = ProductModel.builder().build();
+        final ProductModel productModel = ProductModel.builder().id(13).build();
         final String username = "user";
 
-        Mockito.when(productService.addProduct(productModel, username)).thenReturn(productModel);
-        Mockito.when(loginService.extractUsername(username)).thenReturn(username);
+        //When
+        Mockito.when(productService.addProduct(any(), any())).thenReturn(productModel);
+        Mockito.when(loginService.extractUsername(any())).thenReturn(username);
         ObjectMapper objectMapper = new ObjectMapper();
         MvcResult result = mvc.perform(MockMvcRequestBuilders.post("/api/product").with(csrf())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer test")
@@ -128,25 +128,23 @@ public class ProductControllerTests {
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk()).andReturn();
 
-        // todo
-        //final  String returnedContent = result.getResponse().getContentAsString(); objectMapper.writeValueAsString(productModel);
-        //final String expectedContent =  objectMapper.writeValueAsString(productModel);
-        //Assertions.assertEquals(expectedContent, returnedContent);
+        Mockito.verify(productService, Mockito.atLeastOnce()).addProduct(any(), any());
+
+        // Then
+        final  String returnedContent = result.getResponse().getContentAsString();
+        final String expectedContent =  objectMapper.writeValueAsString(productModel);
+        Assertions.assertEquals(expectedContent, returnedContent);
     }
 
     @WithMockUser
     @Test
     public void testUpdateProduct_NotFound() throws Exception {
-        // Given
-        final ProductModel productModel = ProductModel.builder().build();
-        final String username = "user";
-        final String id = "1";
 
         // When
-        Mockito.when(productService.updateProduct(id, productModel,  username)).thenThrow(BadServiceCallException.class);
+        Mockito.when(productService.updateProduct(any(), any(),  any())).thenThrow(BadServiceCallException.class);
 
         //Then
-        mvc.perform(MockMvcRequestBuilders.put("/api/product/{id}", id)
+        mvc.perform(MockMvcRequestBuilders.put("/api/product/1")
                         .with(csrf())
                         .content("{}")
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -167,33 +165,30 @@ public class ProductControllerTests {
     @Test
     public void testUpdateProduct_Successful() throws Exception {
         //Given
+        ObjectMapper objectMapper = new ObjectMapper();
         final ProductModel productModel = ProductModel.builder().productName("Tea")
                 .amountAvailable(100)
                 .cost(25).sellerId(1)
                 .build();
 
         //When
-        ObjectMapper objectMapper = new ObjectMapper();
-        Mockito.when(productService.updateProduct("1", productModel, "user")).thenReturn(productModel);
-        Mockito.when(loginService.extractUsername(anyString())).thenReturn("user");
+        Mockito.when(loginService.extractUsername(any())).thenReturn("user");
+        Mockito.when(productService.updateProduct(any(), any(), any())).thenReturn(productModel);
 
         //Then
-        MvcResult result = mvc.perform(MockMvcRequestBuilders.put("/api/product/1").with(csrf())
+        MvcResult result = mvc.perform(MockMvcRequestBuilders.put("/api/product/1")
+                        .accept(MediaType.APPLICATION_JSON_VALUE)
+                        .with(csrf())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer test")
-                        //.content(objectMapper.writeValueAsString(productModel))
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .content("{}")
-                )
-                .andDo(print())
-                //.andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-                //.andExpect(content().json("{}"))
+                        .content(objectMapper.writeValueAsString(productModel)))
                 .andExpect(status().isFound()).andReturn();
 
-        // todo
-       final  String returnedContent =  result.getResponse().getContentAsString();
+       Mockito.verify(productService, Mockito.atLeastOnce()).updateProduct(any(), any(), any());
+       final String returnedContent =  result.getResponse().getContentAsString();
        final String expectedContent = objectMapper.writeValueAsString(productModel);
 
-       // Assertions.assertEquals(expectedContent, returnedContent);
+       Assertions.assertEquals(expectedContent, returnedContent);
     }
 
     @WithMockUser
@@ -201,8 +196,9 @@ public class ProductControllerTests {
     public void testDeleteProduct_NotFound() throws Exception {
         //Given
         final String username = "user";
+
         //When
-        Mockito.when(loginService.extractUsername(anyString())).thenReturn(username);
+        Mockito.when(loginService.extractUsername(any())).thenReturn(username);
         Mockito.doThrow(new BadServiceCallException("")).when(productService).deleteProduct("1", username);
 
         //Then
@@ -218,8 +214,9 @@ public class ProductControllerTests {
         final String username = "user";
 
         //When
-        Mockito.when(loginService.extractUsername(anyString())).thenReturn(username);
-        Mockito.doThrow(new NumberFormatException()).when(productService).deleteProduct("1", username);
+        Mockito.when(loginService.extractUsername(any())).thenReturn(username);
+        Mockito.doThrow(new NumberFormatException()).when(productService).deleteProduct(any(), any());
+
         //Then
         mvc.perform(MockMvcRequestBuilders.delete("/api/product/{id}", 1).with(csrf())
                         .header(HttpHeaders.AUTHORIZATION, "Bearer test"))

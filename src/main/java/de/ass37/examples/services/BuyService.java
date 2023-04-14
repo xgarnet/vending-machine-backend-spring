@@ -7,7 +7,6 @@ import de.ass37.examples.models.BuyRespModel;
 import de.ass37.examples.repository.ProductRepository;
 import de.ass37.examples.repository.UserRepository;
 import de.ass37.examples.services.exceptions.BadServiceCallException;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -40,7 +39,6 @@ public class BuyService {
             user.setDeposit(user.getDeposit() - product.getCost() * buyReqModel.getMenge());
             user = userRepository.save(user);
             BuyRespModel buyRespModel = new BuyRespModel();
-            //buyRespModel.setChanges(user.getDeposit());
             buyRespModel.setChanges(changeCoins(user.getDeposit()));
             buyRespModel.setMessage("Successful");
             return buyRespModel;
