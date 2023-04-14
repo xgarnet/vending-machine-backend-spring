@@ -21,8 +21,13 @@ public class ResetService {
 
     public UserModel resetDeposit(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new BadServiceCallException("no such username found"));
-        user.setDeposit(0);
-        User savedUser = userRepository.save(user);
-        return mapper.map(savedUser, UserModel.class);
+        if(user.getRole().equalsIgnoreCase("buyer")) {
+            user.setDeposit(0);
+            User savedUser = userRepository.save(user);
+            return mapper.map(savedUser, UserModel.class);
+        } else  {
+            throw new BadServiceCallException("no byuer role found");
+        }
+
     }
 }

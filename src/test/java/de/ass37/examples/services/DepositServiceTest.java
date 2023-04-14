@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith(SpringExtension.class)
@@ -59,9 +60,21 @@ public class DepositServiceTest {
     }
 
     @Test
+    public void testAddToDepositNoRoleFound() {
+        //Given
+        final String errorMessage = "no buyer role found";
+        final User user = User.builder().role("seller").deposit(0).build();
+        //When
+        Mockito.when(userRepository.findByUsername(any())).thenReturn(Optional.of(user));
+
+        Throwable exception = assertThrows(BadServiceCallException.class, () -> depositService.addToDepositByUser("user", "10"));
+        Assertions.assertEquals(errorMessage, exception.getMessage());
+    }
+
+    @Test
     public void testAddToDepositSuccessful() {
         //Given
-        final User user = User.builder().username("user").deposit(10).build();
+        final User user = User.builder().username("user").role("buyer").deposit(10).build();
 
         //When
         Mockito.when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));

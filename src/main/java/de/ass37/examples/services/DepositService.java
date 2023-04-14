@@ -35,9 +35,14 @@ public class DepositService {
         coins.add(100);
 
         if(coins.contains(Integer.parseInt(coin))) {
-            user.setDeposit(user.getDeposit() + Integer.parseInt(coin));
-            User savedUser = userRepository.save(user);
-            return mapper.map(savedUser, UserModel.class);
+            if(user.getRole().equalsIgnoreCase("buyer")) {
+                user.setDeposit(user.getDeposit() + Integer.parseInt(coin));
+                User savedUser = userRepository.save(user);
+                return mapper.map(savedUser, UserModel.class);
+            } else {
+                throw new BadServiceCallException("no buyer role found");
+            }
+
         } else {
             throw new BadServiceCallException("no such coin allowed");
         }
