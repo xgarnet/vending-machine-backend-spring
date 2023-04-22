@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>de.ass37.examples</groupId>
-	<artifactId>vending-machine-backend-demo</artifactId>
+	<artifactId>vending-machine-backend-spring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>vending-machine-backend-demo</name>
-	<description>vending-machine-app-backend-demo</description>
+	<description>vending-machine-app-backend-spring</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
