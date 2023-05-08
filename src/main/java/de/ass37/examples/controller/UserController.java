@@ -25,12 +25,6 @@ public class UserController {
         return  new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
-    /*
-    @PostMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE, consumes =  MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserModel> addUser(@RequestBody UserModel userModel) {
-        return new ResponseEntity<>(userService.addUser(userModel), HttpStatus.OK);
-    }
-     */
 
     @PutMapping(value = "/user/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserModel> updateUser(@PathVariable String id, @RequestBody UserModel userModel) {

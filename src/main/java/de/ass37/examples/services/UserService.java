@@ -34,11 +34,6 @@ public class UserService {
                 .orElseThrow(() -> new BadServiceCallException("User with id: " + id + " not found"));
     }
 
-    public UserModel addUser(UserModel userModel) {
-        User savedUser =  userRepository.save(mapper.map(userModel, User.class));
-        return mapper.map(savedUser, UserModel.class);
-    }
-
     public UserModel updateUser(String id, UserModel userModel) {
         if(userRepository.existsById(Integer.parseInt(id))) {
             userModel.setId(Integer.parseInt(id));
