@@ -58,9 +58,14 @@ public class ProductServiceTest {
 
     @Test
     public void testGetProductById_Successful() {
+        //Given
         final Product product = Product.builder().id(1).productName("Tee").amountAvailable(10).cost(120).sellerId(3).build();
+
+        //When
         when(productRepository.findById(anyInt())).thenReturn(Optional.of(product));
         ProductModel productModel = productService.getProductById("1");
+
+        //Then
         assertEquals(productModel.getProductName(), product.getProductName());
         assertEquals(productModel.getId(), product.getId());
         assertEquals(productModel.getCost(), product.getCost());
@@ -125,7 +130,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testUpdateProduct_NoSuchUser() {
+    void testUpdateProduct_NoSuchUser() {
         //Given
         final String errorMessage = "no such user";
         final String id = "1";
@@ -140,7 +145,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testUpdateProduct_NoSuchProductId() {
+    void testUpdateProduct_NoSuchProductId() {
         //Given
         final User user = User.builder().id(1).role("seller").build();
         final String errorMessage = "no such product id";
@@ -158,7 +163,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testUpdateProduct_NoSellerRole() {
+    void testUpdateProduct_NoSellerRole() {
         //Given
         final String errorMessage = "no seller role found";
         final User user = User.builder().role("buyer").build();
@@ -175,7 +180,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testUpdateProduct_Successful() {
+    void testUpdateProduct_Successful() {
         //Given
         final String id = "1";
         final User user = User.builder().role("seller").id(1).build();
@@ -203,7 +208,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testDeleteProduct_NoSuchUser() {
+    void testDeleteProduct_NoSuchUser() {
         //Given
         final String id = "1";
         final String errorMessage = "no such user";
@@ -217,7 +222,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testDeleteProduct_NoSuchProductId() {
+    void testDeleteProduct_NoSuchProductId() {
         //Given
         final User user = User.builder().id(1).role("seller").build();
         final String errorMessage = "no such product id";
@@ -234,7 +239,7 @@ public class ProductServiceTest {
 
 
     @Test
-    public void testDeleteProduct_NoSellerRole() {
+    void testDeleteProduct_NoSellerRole() {
         //Given
         final String errorMessage = "no seller role found";
         final User user = User.builder().role("buyer").build();
